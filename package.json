@@ -1,0 +1,42 @@
+{
+  "name": "kg-mvc-example",
+  "version": "0.0.0",
+  "description": "An app built over a class based angular mvc",
+  "main": "index.js",
+  "dependencies": {
+    "gulp-plumber": "~0.6.3",
+    "gulp": "~3.8.5",
+    "gulp-stylus": "~1.0.2",
+    "gulp-coffeelint": "~0.3.3",
+    "gulp-watch": "~0.6.8"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.7.1",
+    "gulp-coffee": "~2.0.1",
+    "nib": "~1.0.3",
+    "gulp-livereload": "~2.1.0",
+    "lodash": "~2.4.1",
+    "xml2js": "~0.4.4",
+    "q": "~1.0.1",
+    "gulp-jade": "~0.6.1",
+    "gulp-filter": "~0.5.0"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krgeppert/kg-mvc-example.git"
+  },
+  "keywords": [
+    "mvc",
+    "angular",
+    "class"
+  ],
+  "author": "Kyle Geppert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krgeppert/kg-mvc-example/issues"
+  },
+  "homepage": "https://github.com/krgeppert/kg-mvc-example"
+}
