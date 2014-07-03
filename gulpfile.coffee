@@ -39,15 +39,3 @@ gulp.task 'develop', ()->
     .pipe(livereload())
 
 
-
-
-# isAdded = (file)->
-#   file.event is 'added'
-
-# gulp.task('default', function () {
-#     watch({glob: '**/*.js'})
-#         .pipe(filter(isAdded))
-#         .pipe(gulp.dest('newfiles'))
-#         .pipe(filter.restore())
-#         .pipe(gulp.dest('oldfiles'));
-# });

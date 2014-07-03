@@ -6,7 +6,7 @@ angular.module('kg-mvc-example', [
 ]).config(($routeProvider)->
   _.reduce(
     '/':
-      templateUrl: 'views/splash.html'
+      templateUrl: 'templates/foo.html'
     '/login/:teamId':
       templateUrl: 'views/login.html'
       controller: 'LoginCtrl'
