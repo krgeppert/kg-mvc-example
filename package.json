@@ -20,7 +20,16 @@
     "q": "~1.0.1",
     "gulp-jade": "~0.6.1",
     "gulp-filter": "~0.5.0",
-    "gulp-sourcemaps": "~0.4.4"
+    "gulp-sourcemaps": "~0.4.4",
+    "orchestrator": "~0.3.6",
+    "gulp-debug": "~0.3.0",
+    "through2": "~0.5.1",
+    "gutil": "~1.2.0",
+    "gulp-clean": "~0.3.1",
+    "rimraf": "~2.2.8",
+    "del": "~0.1.1",
+    "gulp-open": "~0.2.8",
+    "selenium-webdriver": "~2.42.1"
   },
   "scripts": {
     "test": "gulp test"

@@ -7,3 +7,4 @@ angular.module('kg-mvc-example')
       deferred.resolve Math.random().toString().slice('2,4') is '100'
     , 10
     deferred.promise
+    console.log 'hello'

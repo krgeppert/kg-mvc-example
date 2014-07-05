@@ -6,7 +6,8 @@
     setTimeout(function() {
       return deferred.resolve(Math.random().toString().slice('2,4') === '100');
     }, 10);
-    return deferred.promise;
+    deferred.promise;
+    return console.log('hello');
   });
 
 }).call(this);

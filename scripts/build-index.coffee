@@ -42,14 +42,12 @@ insertScriptTags = (indexHtmlFile, fileNames)->
   scriptTags = _.reduce fileNames, (memo, fileName)->
     "#{memo}\n <script src=\"./js/#{ fileName }\"></script>"
   , ''
-  console.log scriptTags
   indexHtmlFile.replace '<!-- %scripts% -->', scriptTags
 
 insertCSSLinks = (indexHtmlFile, fileNames)->
   styleTags = _.reduce fileNames, (memo, fileName)->
     "#{memo}\n <style type=\"text/css\" src=\"./css/#{ fileName }\"></style>"
   , ''
-  console.log styleTags
   indexHtmlFile.replace '<!-- %styles% -->', styleTags
 
 writeIndexToBuild = (indexHtmlFile)->
