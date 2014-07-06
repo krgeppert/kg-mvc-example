@@ -1,3 +1,4 @@
 module.exports.inDevelopment = [
-  "app/fooboo/page1/widget/header"
+  "app/splash"
 ]
+module.exports.route = 'home'

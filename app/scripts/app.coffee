@@ -1,27 +1,15 @@
 'use strict';
 
-angular.module('kg-mvc-example', [
+angular.module('kgapp', [
   'ngRoute'
-  'ngCookies'
-]).config(($routeProvider)->
-  _.reduce(
-    '/':
-      templateUrl: 'templates/foo.html'
-    '/login/:teamId':
-      templateUrl: 'views/login.html'
-      controller: 'LoginCtrl'
-    '/players/:teamId':
-      templateUrl: 'views/players.html'
-      controller: 'PlayersCtrl'
-  , (provider, routeMapping, route)->
-    $routeProvider.when route, routeMapping
-  , $routeProvider
-  ).otherwise
+]).config ($routeProvider, $locationProvider)->
+  $routeProvider.when '/',
+    templateUrl: 'templates/splash.html'
+    controller: 'SplashCtrl'
+  .otherwise
     redirectTo: '/'
-).run (auth, analytics, logging)->
 
-  analytics.recordPageView()
+  $locationProvider.html5Mode true
 
-  logging.info 'Welcome to the kg-mvc-example'
-
-  auth.attempt()
+.run (logger)->
+  logger.info 'Welcome to the kg-mvc-example'

@@ -15,6 +15,9 @@ module.exports =
   images:
     regexes: []
     extension: ''
+  test:
+    regexes: []
+    extension: '.coffee'
 
 if _.contains config.inDevelopment, 'all'
   module.exports.coffee.push './app/**/*.coffee'

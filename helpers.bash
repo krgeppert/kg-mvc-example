@@ -9,4 +9,5 @@ component() {
   mkdir styles;
   mkdir scripts;
   mkdir images;
+  mkdir test;
 }
