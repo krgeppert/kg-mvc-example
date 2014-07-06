@@ -3,6 +3,7 @@
 angular.module('kgapp', [
   'ngRoute'
 ]).config ($routeProvider, $locationProvider)->
+
   $routeProvider.when '/',
     templateUrl: 'templates/splash.html'
     controller: 'SplashCtrl'

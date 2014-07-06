@@ -12,18 +12,61 @@ doIt = require './scripts/gulp-doit'
 componentConfig = require './scripts/dev-regex.coffee'
 del = require 'del'
 connect = require 'gulp-connect'
+ngmin = require 'gulp-ngmin'
+cssmin = require 'gulp-cssmin'
+uglify = require 'gulp-uglify'
+concat = require 'gulp-concat'
+debug = require 'gulp-debug'
 
-gulp.task 'default', ()->
-  util.log 'No default set.'
 
-gulp.task 'clean', (cb)->
-  del ['./build/*/*'], cb
+gulp.task 'build', ['clean-dist','minify-js','minify-css','copy-html','copy-images-prod'], (cb)->
+  buildIndex('dist').then (err)->
+    if err then throw err
+    cb()
+  false
 
-gulp.task 'build-index',['build-dev'], (cb)->
-  buildIndex()
-  cb()
+gulp.task 'build-dev', ['clean-build','build-js', 'build-css', 'build-html', 'copy-css']
 
-gulp.task 'build-dev', ['build-js', 'build-css', 'build-html'], ()->
+gulp.task 'build-index', ['build-dev'], ()->
+  buildIndex('dev').then ->
+    cb()
+  false
+
+
+gulp.task 'clean-dist', (cb)->
+  del ['./dist/**/*'], cb
+
+gulp.task 'clean-build', (cb)->
+  del ['./build/**/*'], cb
+
+gulp.task 'copy-images', ()->
+  gulp.src(componentConfig.images.regexes)
+    .pipe(gulp.dest('./build/images'))
+
+gulp.task 'copy-images-prod', ()->
+  gulp.src('./build/images')
+    .pipe(gulp.dest('./dist/images'))
+
+gulp.task 'minify-css', ['build-css', 'copy-css'] ,()->
+  gulp.src('./build/**/*.css')
+    .pipe(cssmin())
+    .pipe(concat('main.css'))
+    .pipe(gulp.dest('./dist'))
+
+gulp.task 'minify-js', ['build-js'],()->
+  gulp.src('./build/**/*.js')
+    .pipe(ngmin())
+    .pipe(concat('main.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./dist'))
+
+gulp.task 'copy-html', ['build-html'],()->
+  gulp.src('./build/templates/**/*.html')
+    .pipe(gulp.dest('./dist/templates'))
+
+gulp.task 'copy-css', ()->
+  gulp.src(componentConfig.css.regexes)
+    .pipe(gulp.dest('./build/css'))
 
 gulp.task 'build-js', ()->
   gulp.src(componentConfig.scripts.regexes)
@@ -43,7 +86,7 @@ gulp.task 'build-html', ()->
 gulp.task 'build-tests', ()->
   gulp.src(componentConfig.test.regexes)
     .pipe(coffee({bare:true}).on('error', console.log))
-    .pipe(gulp.dest('./build/test'))
+    .pipe(gulp.dest('./tests'))
 
 gulp.task 'watch', ['build-dev'], (cb)->
   gulp.src('./app/index.html', {read:false})
@@ -72,6 +115,7 @@ gulp.task 'watch', ['build-dev'], (cb)->
     .pipe(jade({use: [nib()]}).on('error', console.log))
     .pipe(gulp.dest('./build/templates'))
     .pipe(livereload())
+
   cb()
 
 gulp.task 'test', ['build-tests', 'build-js'], ()->
@@ -80,9 +124,10 @@ gulp.task 'test', ['build-tests', 'build-js'], ()->
       configFile: 'karma.conf.coffee'
       action: 'run'
     })).on 'error', (err)->
-      throw err
+      console.log err
 
 gulp.task 'develop', ['watch', 'build-index'], ()->
+  console.log 'woo?'
   connect.server
     root: 'build'
     port: 5050

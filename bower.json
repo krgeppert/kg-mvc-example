@@ -1,0 +1,31 @@
+{
+  "name": "kg-mvc-example",
+  "version": "0.0.0",
+  "homepage": "no",
+  "authors": [
+    "Kyle Geppert <Kyle.Geppert@docusign.com>"
+  ],
+  "description": "Foobar",
+  "main": "index.html",
+  "keywords": [
+    "nope"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-route": "~1.2.19",
+    "angular-mocks": "~1.2.19",
+    "angular": "~1.2.19",
+    "d3": "~3.4.9",
+    "assert": "~0.1.0",
+    "jquery": "2.1.1",
+    "lodash": "~2.4.1"
+  }
+}

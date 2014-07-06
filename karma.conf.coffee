@@ -10,14 +10,15 @@ module.exports = (config)->
 
     # list of files / patterns to load in the browser
     files: [
-      'test/assert.js'
-      'test/jQuery.js'
-      'test/angular.js'
-      'test/angular-route.js'
-      'test/angular-mocks.js'
-      'test/lodash.js'
-      'build/js/*.js'
-      'build/test/*.js'
+      "bower_components/assert/assert.js"
+      "bower_components/jquery/dist/jquery.min.js"
+      "bower_components/angular/angular.min.js"
+      "bower_components/angular-route/angular-route.min.js"
+      "bower_components/angular-mocks/angular-mocks.js"
+      "bower_components/lodash/dist/lodash.min.js"
+      "bower_components/d3/d3.min.js"
+      "build/js/**/*.js"
+      "tests/**/*.js"
     ]
 
     # list of files / patterns to exclude
