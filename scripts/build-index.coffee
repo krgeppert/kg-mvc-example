@@ -7,7 +7,6 @@ util = require 'util'
 
 module.exports = (build)->
   if build is 'dev'
-    console.log 'dev mode'
     readIndex().then(buildIndex).then(writeIndexToBuild)
   else
     readIndex()
@@ -84,7 +83,7 @@ turnOnGoogleAnalytics = (indexHtmlFile)->
   indexHtmlFile = indexHtmlFile.replace regex, "'auto'"
   indexHtmlFile
 
-writeIndexToBuild = (indexHtmlFile, path = 'build')->
+writeIndexToBuild = (indexHtmlFile, path = 'dev')->
   deferred = q.defer()
   fs.writeFile "/Users/kyle.geppert/Code/Personal/kg-mvc-example/#{path}/index.html", indexHtmlFile,
     encoding: 'utf-8'

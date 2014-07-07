@@ -32,7 +32,7 @@ else
     _.each config.inDevelopment, (componentPath)->
       path = componentPath.split '/'
       _.reduce path, (oldPath, newPath)->
-        group.regexes.push  "#{oldPath}/#{newPath}/#{if type is 'css' then 'styles' else type}/**/*#{group.extension}"
+        oldPath = oldPath.replace '\/app', 'app'
+        group.regexes.push  "#{if oldPath then (oldPath + '/') else oldPath }#{newPath}/#{if type is 'css' then 'styles' else type}/**/*#{group.extension}"
         "#{oldPath}/#{newPath}"
-      , '.'
-
+      , ''

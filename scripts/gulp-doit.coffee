@@ -1,9 +1,9 @@
 through = require 'through2'
 
-doer = (doIt)->
+doer = (doIt, argument)->
 
   stream = through.obj (file, enc, callback)->
-    doIt()
+    doIt(argument)
     callback()
 
   stream

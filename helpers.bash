@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#TODO - build this out to be more bra-like.
 
   # new component fooboo ./app/
 component() {

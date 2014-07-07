@@ -1,3 +1,5 @@
+
+_ = require 'lodash'
 gulp = require 'gulp'
 watch = require 'gulp-watch'
 livereload = require 'gulp-livereload'
@@ -17,124 +19,181 @@ cssmin = require 'gulp-cssmin'
 uglify = require 'gulp-uglify'
 concat = require 'gulp-concat'
 debug = require 'gulp-debug'
+filter = require 'gulp-filter'
+runSequence = require 'run-sequence'
+
+gulp.task 'build-dist', (callback)->
+  runSequence ['clean-dist', 'clean-temp']
+    , ['minify-js','minify-css','compile-jade-dist','copy-images-dist']
+    , 'build-dist-index'
+    , callback
+
+gulp.task 'build-dev', (callback)->
+  runSequence 'clean-dev'
+    , 'copy-bower'
+    , ['compile-coffee-dev','compile-stylus-dev','compile-jade-dev','copy-images-dev']
+    , 'build-dev-index'
+    , callback
+
+_.each ['dist', 'dev'], (env)->
+
+  if env is 'dist' then dir = 'temp' else dir = 'dev'
+
+  gulp.task "build-#{env}-index", (cb)->
+    buildIndex(env).then ->
+      cb()
+    false
+
+  gulp.task "clean-#{env}", (cb)->
+    del ["./#{env}/**/*"], cb
+
+  gulp.task "copy-images-#{env}", ()->
+    gulp.src(componentConfig.images.regexes)
+      .pipe(gulp.dest("./#{env}/images"))
+
+  gulp.task "compile-jade-#{env}", ()->
+    gulp.src(componentConfig.templates.regexes)
+      .pipe(jade().on('error', console.log))
+      .pipe(gulp.dest("./#{env}/templates"))
+
+  gulp.task "connect-#{env}", ()->
+    connect.server
+      root: env
+      port: 5050
+
+_.each ['dev', 'temp'], (dir)->
+  gulp.task "copy-css-#{dir}", ()->
+    gulp.src(componentConfig.css.regexes)
+      .pipe(gulp.dest("./#{dir}/css"))
+
+  gulp.task "compile-coffee-#{dir}", ()->
+    gulp.src(componentConfig.scripts.regexes)
+      .pipe(coffee({bare:true}).on('error', console.log))
+      .pipe(gulp.dest("./#{dir}/js"))
+
+  gulp.task "compile-stylus-#{dir}", ()->
+    gulp.src(componentConfig.styles.regexes)
+      .pipe(stylus().on('error', console.log))
+      .pipe(gulp.dest("./#{dir}/css"))
 
 
-gulp.task 'build', ['clean-dist','minify-js','minify-css','copy-html','copy-images-prod'], (cb)->
-  buildIndex('dist').then (err)->
-    if err then throw err
-    cb()
-  false
-
-gulp.task 'build-dev', ['clean-build','build-js', 'build-css', 'build-html', 'copy-css']
-
-gulp.task 'build-index', ['build-dev'], ()->
-  buildIndex('dev').then ->
-    cb()
-  false
-
-
-gulp.task 'clean-dist', (cb)->
-  del ['./dist/**/*'], cb
-
-gulp.task 'clean-build', (cb)->
-  del ['./build/**/*'], cb
-
-gulp.task 'copy-images', ()->
-  gulp.src(componentConfig.images.regexes)
-    .pipe(gulp.dest('./build/images'))
-
-gulp.task 'copy-images-prod', ()->
-  gulp.src('./build/images')
-    .pipe(gulp.dest('./dist/images'))
-
-gulp.task 'minify-css', ['build-css', 'copy-css'] ,()->
-  gulp.src('./build/**/*.css')
+gulp.task 'minify-css', ['compile-stylus-temp', 'copy-css-temp'] ,()->
+  gulp.src('./temp/css/**/*.css')
     .pipe(cssmin())
     .pipe(concat('main.css'))
     .pipe(gulp.dest('./dist'))
 
-gulp.task 'minify-js', ['build-js'],()->
-  gulp.src('./build/**/*.js')
+gulp.task 'minify-js', ['compile-coffee-temp'],()->
+  gulp.src('./temp/js/**/*.js')
     .pipe(ngmin())
     .pipe(concat('main.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./dist'))
 
-gulp.task 'copy-html', ['build-html'],()->
-  gulp.src('./build/templates/**/*.html')
-    .pipe(gulp.dest('./dist/templates'))
-
 gulp.task 'copy-bower', ()->
   gulp.src('./bower_components/**/*.js')
-    .pipe(gulp.dest('./build/bower_components'))
+    .pipe(gulp.dest('./dev/bower_components'))
 
-gulp.task 'copy-css', ['copy-bower'],()->
-  gulp.src(componentConfig.css.regexes)
-    .pipe(gulp.dest('./build/css'))
+gulp.task "clean-temp", (cb)->
+  del ["./temp/**/*"], cb
 
-gulp.task 'build-js', ['copy-bower'], ()->
-  gulp.src(componentConfig.scripts.regexes)
-    .pipe(coffee({bare:true}).on('error', console.log))
-    .pipe(gulp.dest('./build/js'))
+gulp.task 'dev-watch',  (callback)->
+  runSequence ['watch-index', 'watch-coffee', 'watch-jade', 'watch-stylus', 'watch-images']
+  , 'live-reload'
+  , callback
 
-gulp.task 'build-css', ['copy-bower'],()->
-  gulp.src(componentConfig.styles.regexes)
-    .pipe(stylus().on('error', console.log))
-    .pipe(gulp.dest('./build/css'))
-
-gulp.task 'build-html', ['copy-bower'],()->
-  gulp.src(componentConfig.templates.regexes)
-    .pipe(jade({use: [nib()]}).on('error', console.log))
-    .pipe(gulp.dest('./build/templates'))
-
-gulp.task 'build-tests', ()->
-  gulp.src(componentConfig.test.regexes)
-    .pipe(coffee({bare:true}).on('error', console.log))
-    .pipe(gulp.dest('./tests'))
-
-gulp.task 'watch', ['build-dev'], (cb)->
+gulp.task 'watch-index', ()->
   gulp.src('./app/index.html', {read:false})
     .pipe(watch())
     .pipe(plumber())
-    .pipe(doIt(buildIndex))
-    .pipe(livereload())
+    .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
 
+gulp.task 'watch-coffee', ()->
   gulp.src(componentConfig.scripts.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
     .pipe(coffee({bare:true}).on('error', console.log))
-    .pipe(gulp.dest('./build/js'))
-    .pipe(livereload())
+    .pipe(gulp.dest('./dev/js'))
 
+  watch({glob: componentConfig.scripts.regexes})
+    .pipe(filter(isAdded))
+    .pipe(plumber())
+    .pipe(coffee({bare:true}).on('error', console.log))
+    .pipe(gulp.dest("./dev/js"))
+    .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
+
+
+gulp.task 'watch-stylus', ()->
   gulp.src(componentConfig.styles.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
     .pipe(stylus().on('error', console.log))
-    .pipe(gulp.dest('./build/css'))
-    .pipe(livereload())
+    .pipe(gulp.dest('./dev/css'))
 
+  watch({glob: componentConfig.styles.regexes})
+    .pipe(filter(isAdded))
+    .pipe(plumber())
+    .pipe(stylus().on('error', console.log))
+    .pipe(gulp.dest('./dev/css'))
+    .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
+
+gulp.task 'watch-jade', ()->
   gulp.src(componentConfig.templates.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
     .pipe(jade({use: [nib()]}).on('error', console.log))
-    .pipe(gulp.dest('./build/templates'))
+    .pipe(gulp.dest('./dev/templates'))
+
+  watch({glob: componentConfig.templates.regexes})
+    .pipe(filter(isAdded))
+    .pipe(plumber())
+    .pipe(jade({use: [nib()]}).on('error', console.log))
+    .pipe(gulp.dest('./dev/templates'))
+
+gulp.task 'watch-images', ()->
+  gulp.src(componentConfig.templates.regexes, {read:false})
+    .pipe(watch())
+    .pipe(plumber())
+    .pipe(gulp.dest('./dev/images'))
+
+  watch({glob: componentConfig.images.regexes})
+  .pipe(filter(isAdded))
+  .pipe(plumber())
+  .pipe(gulp.dest('./dev/images'))
+
+gulp.task 'live-reload', ()->
+  watch({glob: 'dev/**/*'})
+    .pipe(plumber())
     .pipe(livereload())
 
-  cb()
+gulp.task 'compile-tests', ()->
+  gulp.src(componentConfig.test.regexes)
+    .pipe(coffee({bare:true}).on('error', console.log))
+    .pipe(gulp.dest('./tests'))
 
-gulp.task 'test', ['build-tests', 'build-js'], ()->
-  gulp.src('./build/test/*.js')
+gulp.task 'clean-tests', (cb)->
+  del ['./tests/**/*'], cb
+
+gulp.task 'run-tests', ()->
+  gulp.src('./tests/**/*')
     .pipe(karma({
       configFile: 'karma.conf.coffee'
       action: 'run'
     })).on 'error', (err)->
       console.log err
 
+gulp.task 'test-build',  (callback)->
+  runSequence ['clean-tests', 'clean-dev'], ['compile-tests', 'compile-js-dev'], 'run-tests', callback
 
-gulp.task 'develop', ['watch', 'build-index'], ()->
-  connect.server
-    root: 'build'
-    port: 5050
+gulp.task 'test', (callback)->
+  runSequence 'clean-tests', 'build-tests', 'run-tests', callback
 
+gulp.task 'develop', (callback)->
+  runSequence ['build-dev', 'compile-tests']
+    , 'dev-watch'
+    , ['run-tests', 'connect-dev']
+    , callback
 
+isAdded = (file)->
+  file.event is 'added'
 # TODO: recognize file name changes, recognize added files.
