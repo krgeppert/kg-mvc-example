@@ -64,21 +64,25 @@ gulp.task 'copy-html', ['build-html'],()->
   gulp.src('./build/templates/**/*.html')
     .pipe(gulp.dest('./dist/templates'))
 
-gulp.task 'copy-css', ()->
+gulp.task 'copy-bower', ()->
+  gulp.src('./bower_components/**/*.js')
+    .pipe(gulp.dest('./build/bower_components'))
+
+gulp.task 'copy-css', ['copy-bower'],()->
   gulp.src(componentConfig.css.regexes)
     .pipe(gulp.dest('./build/css'))
 
-gulp.task 'build-js', ()->
+gulp.task 'build-js', ['copy-bower'], ()->
   gulp.src(componentConfig.scripts.regexes)
     .pipe(coffee({bare:true}).on('error', console.log))
     .pipe(gulp.dest('./build/js'))
 
-gulp.task 'build-css', ()->
+gulp.task 'build-css', ['copy-bower'],()->
   gulp.src(componentConfig.styles.regexes)
     .pipe(stylus().on('error', console.log))
     .pipe(gulp.dest('./build/css'))
 
-gulp.task 'build-html', ()->
+gulp.task 'build-html', ['copy-bower'],()->
   gulp.src(componentConfig.templates.regexes)
     .pipe(jade({use: [nib()]}).on('error', console.log))
     .pipe(gulp.dest('./build/templates'))
@@ -126,8 +130,8 @@ gulp.task 'test', ['build-tests', 'build-js'], ()->
     })).on 'error', (err)->
       console.log err
 
+
 gulp.task 'develop', ['watch', 'build-index'], ()->
-  console.log 'woo?'
   connect.server
     root: 'build'
     port: 5050
