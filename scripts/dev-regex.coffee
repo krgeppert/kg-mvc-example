@@ -21,6 +21,9 @@ module.exports =
   css:
     regexes: []
     extension: '.css'
+  'ui-tests':
+    regexes: []
+    extension: '.java'
 
 if _.contains config.inDevelopment, 'all'
   console.log 'TODO: Fix the "all" setting.'

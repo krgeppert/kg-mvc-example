@@ -21,6 +21,10 @@ concat = require 'gulp-concat'
 debug = require 'gulp-debug'
 filter = require 'gulp-filter'
 runSequence = require 'run-sequence'
+browserSync = require 'browser-sync'
+sys = require 'sys'
+exec = require('child_process').exec
+
 
 gulp.task 'build-dist', (callback)->
   runSequence ['clean-dist', 'clean-temp']
@@ -107,14 +111,9 @@ gulp.task 'watch-index', ()->
     .pipe(watch())
     .pipe(plumber())
     .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
+  gulp
 
 gulp.task 'watch-coffee', ()->
-  gulp.src(componentConfig.scripts.regexes, {read:false})
-    .pipe(watch())
-    .pipe(plumber())
-    .pipe(coffee({bare:true}).on('error', console.log))
-    .pipe(gulp.dest('./dev/js'))
-
   watch({glob: componentConfig.scripts.regexes})
     .pipe(filter(isAdded))
     .pipe(plumber())
@@ -122,14 +121,14 @@ gulp.task 'watch-coffee', ()->
     .pipe(gulp.dest("./dev/js"))
     .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
 
-
-gulp.task 'watch-stylus', ()->
-  gulp.src(componentConfig.styles.regexes, {read:false})
+  gulp.src(componentConfig.scripts.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
-    .pipe(stylus().on('error', console.log))
-    .pipe(gulp.dest('./dev/css'))
+    .pipe(coffee({bare:true}).on('error', console.log))
+    .pipe(gulp.dest('./dev/js'))
+  gulp
 
+gulp.task 'watch-stylus', ()->
   watch({glob: componentConfig.styles.regexes})
     .pipe(filter(isAdded))
     .pipe(plumber())
@@ -137,34 +136,44 @@ gulp.task 'watch-stylus', ()->
     .pipe(gulp.dest('./dev/css'))
     .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
 
-gulp.task 'watch-jade', ()->
-  gulp.src(componentConfig.templates.regexes, {read:false})
+  gulp.src(componentConfig.styles.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
-    .pipe(jade({use: [nib()]}).on('error', console.log))
-    .pipe(gulp.dest('./dev/templates'))
+    .pipe(stylus().on('error', console.log))
+    .pipe(gulp.dest('./dev/css'))
+  gulp
 
+gulp.task 'watch-jade', ()->
   watch({glob: componentConfig.templates.regexes})
     .pipe(filter(isAdded))
     .pipe(plumber())
     .pipe(jade({use: [nib()]}).on('error', console.log))
     .pipe(gulp.dest('./dev/templates'))
 
-gulp.task 'watch-images', ()->
   gulp.src(componentConfig.templates.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
-    .pipe(gulp.dest('./dev/images'))
+    .pipe(jade({use: [nib()]}).on('error', console.log))
+    .pipe(gulp.dest('./dev/templates'))
+  gulp
 
+gulp.task 'watch-images', ()->
   watch({glob: componentConfig.images.regexes})
   .pipe(filter(isAdded))
   .pipe(plumber())
   .pipe(gulp.dest('./dev/images'))
 
+  gulp.src(componentConfig.templates.regexes, {read:false})
+    .pipe(watch())
+    .pipe(plumber())
+    .pipe(gulp.dest('./dev/images'))
+  gulp
+
 gulp.task 'live-reload', ()->
-  watch({glob: 'dev/**/*'})
+  watch({glob: 'dev/**/*', emitOnGlob:false})
     .pipe(plumber())
     .pipe(livereload())
+  gulp
 
 gulp.task 'compile-tests', ()->
   gulp.src(componentConfig.test.regexes)
@@ -188,11 +197,44 @@ gulp.task 'test-build',  (callback)->
 gulp.task 'test', (callback)->
   runSequence 'clean-tests', 'build-tests', 'run-tests', callback
 
+gulp.task 'clean-ui-tests', (callback)->
+  del ["./ui-tests/**/*"], callback
+
+gulp.task 'copy-ui-tests', ()->
+  gulp.src(componentConfig['ui-tests'].regexes)
+    .pipe(gulp.dest('./ui-tests'))
+
+gulp.task 'compile-java', (callback)->
+  puts = (error, stdout, stderr)-> sys.puts stdout
+  exec 'javac -cp .:jars/* ui-tests/*.java', puts
+  callback()
+
+gulp.task 'build-ui-tests', (callback)->
+  runSequence 'clean-ui-tests', 'copy-ui-tests', 'compile-java', callback
+
+gulp.task 'run-ui-tests', (callback)->
+  puts = (error, stdout, stderr)-> sys.puts stdout
+  exec 'java -cp .:jars/* org.junit.runner.JUnitCore Testing', puts
+  callback()
+
+gulp.task 'browser-sync', ()->
+  browserSync()
+
 gulp.task 'develop', (callback)->
   runSequence ['build-dev', 'compile-tests']
     , 'dev-watch'
     , ['run-tests', 'connect-dev']
     , callback
+
+gulp.task 'develop-bs', (callback)->
+  runSequence ['build-dev', 'compile-tests']
+    , 'dev-watch'
+    , ['run-tests', 'connect-dev', 'browser-sync']
+    , callback
+
+gulp.task 'debug', (callback)->
+  runSequence 'connect-dev', 'browser-sync', callback
+
 
 isAdded = (file)->
   file.event is 'added'

@@ -22,7 +22,6 @@
 <body ng-app="kgapp">
   <div ng-view=""></div>
 
-  <!-- %live-reload-start% --><script src="http://localhost:35729/livereload.js"></script><!-- %live-reload-end% -->
 
   <!-- local-libraries-start -->
 
@@ -43,6 +42,9 @@
   cdn-libraries-end -->
 
   <!-- %scripts% -->
+
+  <!-- %live-reload-start% --><script src="http://localhost:35729/livereload.js"></script><script type='text/javascript'> document.write("<script async src='//HOST:3000/browser-sync-client.1.1.2.js'><\/script>".replace(/HOST/g, location.hostname));</script><!-- %live-reload-end% -->
+
 
 </body>
 </html>
