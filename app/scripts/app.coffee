@@ -4,13 +4,13 @@ angular.module('kgapp', [
   'ngRoute'
 ]).config ($routeProvider, $locationProvider)->
 
-  $routeProvider.when '/',
+  $routeProvider.when '/splash',
     templateUrl: 'templates/splash.html'
     controller: 'SplashCtrl'
   .otherwise
-    redirectTo: '/'
+    redirectTo: '/splash'
 
-  $locationProvider.html5Mode true
+  # $locationProvider.html5Mode true
 
 .run (logger)->
   logger.info 'Welcome to the kg-mvc-example'

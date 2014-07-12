@@ -35,19 +35,14 @@ buildIndex = (indexHtmlFile)->
   jsDeferred = q.defer()
   buildDeffered = q.defer()
 
-  fs.readdir '/Users/kyle.geppert/Code/Personal/kg-mvc-example/build/js', (err, fileNames)->
-    indexHtmlFile = insertScriptTags indexHtmlFile, _.each(fileNames, (fileName, index)->
-      fileNames[index] = './js/' + fileName
-    )
+  fs.readdir '/Users/kyle.geppert/Code/Personal/kg-mvc-example/dev/js', (err, fileNames)->
+    indexHtmlFile = insertScriptTags indexHtmlFile, _.map(fileNames, (fileName)-> './js/' + fileName)
     jsDeferred.resolve()
     cssDeferred.promise.then ()->
       buildDeffered.resolve indexHtmlFile
 
-  fs.readdir '/Users/kyle.geppert/Code/Personal/kg-mvc-example/build/css', (err, fileNames)->
-    indexHtmlFile = insertCSSLinks indexHtmlFile, _.reduce(fileNames, (fileName, index)->
-      fileNames[index] = './css/' + fileName
-      fileNames
-    )
+  fs.readdir '/Users/kyle.geppert/Code/Personal/kg-mvc-example/dev/css', (err, fileNames)->
+    indexHtmlFile = insertCSSLinks indexHtmlFile, _.map(fileNames, (fileName)-> './css/' + fileName)
     cssDeferred.resolve()
     jsDeferred.promise.then ()->
       buildDeffered.resolve indexHtmlFile
@@ -62,15 +57,18 @@ cdnify = (indexHtmlFile)->
   indexHtmlFile
 
 insertScriptTags = (indexHtmlFile, filePaths)->
+  unless _.isArray(filePaths) then filePaths = [filePaths]
   scriptTags = _.reduce filePaths, (memo, filePath)->
     "#{memo}\n <script src=\"#{ filePath }\"></script>"
   , ''
   indexHtmlFile.replace '<!-- %scripts% -->', scriptTags
 
 insertCSSLinks = (indexHtmlFile, filePaths)->
+  unless _.isArray(filePaths) then filePaths = [filePaths]
   styleTags = _.reduce filePaths, (memo, filePath)->
-    "#{memo}\n <style type=\"text/css\" src=\"#{ filePath }\"></style>"
+    "#{memo}\n <link rel=\"stylesheet\" type=\"text/css\" href=\"#{ filePath }\"></link>"
   , ''
+
   indexHtmlFile.replace '<!-- %styles% -->', styleTags
 
 replaceLiveReloadTag = (indexHtmlFile)->

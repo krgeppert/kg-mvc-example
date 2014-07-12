@@ -35,13 +35,12 @@ gulp.task 'build-dist', (callback)->
 gulp.task 'build-dev', (callback)->
   runSequence 'clean-dev'
     , 'copy-bower'
-    , ['compile-coffee-dev','compile-stylus-dev','compile-jade-dev','copy-images-dev']
+    , ['compile-coffee-dev','compile-stylus-dev','compile-jade-dev','copy-images-dev', 'copy-css-dev']
     , 'build-dev-index'
     , callback
 
 _.each ['dist', 'dev'], (env)->
 
-  if env is 'dist' then dir = 'temp' else dir = 'dev'
 
   gulp.task "build-#{env}-index", (cb)->
     buildIndex(env).then ->
@@ -195,7 +194,7 @@ gulp.task 'test-build',  (callback)->
   runSequence ['clean-tests', 'clean-dev'], ['compile-tests', 'compile-js-dev'], 'run-tests', callback
 
 gulp.task 'test', (callback)->
-  runSequence 'clean-tests', 'build-tests', 'run-tests', callback
+  runSequence 'clean-tests', 'compile-tests', 'run-tests', callback
 
 gulp.task 'clean-ui-tests', (callback)->
   del ["./ui-tests/**/*"], callback
@@ -214,7 +213,7 @@ gulp.task 'build-ui-tests', (callback)->
 
 gulp.task 'run-ui-tests', (callback)->
   puts = (error, stdout, stderr)-> sys.puts stdout
-  exec 'java -cp .:jars/* org.junit.runner.JUnitCore Testing', puts
+  exec 'java -cp .:jars/*:./ui-tests org.junit.runner.JUnitCore Testing', puts #TODO MAKE WORK
   callback()
 
 gulp.task 'browser-sync', ()->
