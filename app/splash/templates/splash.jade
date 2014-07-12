@@ -1,4 +1,31 @@
-.navbar.navbar-default
+nav.navbar.navbar-default
   .container-fluid
     .navbar-header
-      a.navbar-brand=('ultiAnalytics')
+      button.navbar-toggle.collapsed.button(kg-dropdown-toggle="main-nav")
+        span.sr-only
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand=("ultiAnalAdmin")
+    .collapse.navbar-collapse(kg-dropdown="main-nav")
+      ul.nav.navbar-nav(kg-active="'active'")
+        li
+          a=("Games")
+        li
+          a=("Players")
+        li
+          a=("Settings")
+        li
+          a=("Broadcast")
+      ul.nav.navbar-nav.navbar-right
+        li(ng-click="logout()")
+          a=("Logout")
+        li.dropdown
+          a.dropdown-toggle(kg-dropdown-toggle="'account-settings'")
+            span=("Teams")
+            span.caret
+          ul.dropdown-menu(kg-dropdown="'account-settings'")
+            li(ng-repeat="team in teams")
+              a=("{{team.name}}")
+            li()
+              a=("test team")
