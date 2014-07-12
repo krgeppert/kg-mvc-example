@@ -17,7 +17,7 @@ module.exports = (config)->
       "bower_components/angular-mocks/angular-mocks.js"
       "bower_components/lodash/dist/lodash.min.js"
       "bower_components/d3/d3.min.js"
-      "build/js/**/*.js"
+      "dev/js/**/*.js"
       "tests/**/*.js"
     ]
 
