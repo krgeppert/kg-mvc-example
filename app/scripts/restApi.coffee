@@ -1,10 +1,12 @@
 angular.module('kgapp').factory 'restApi', ($http, $q, config)->
   get: (url)->
     window.mocks ?= {}
-    if config.devMode() and not window.mocks[url] then return $http.get config.getBaseUrl() + url
-    else
-      deferred = $q.defer()
-      setTimeout ->
-        deferred.resolve window.mocks[url]
-      deferred.promise
+    for mockUrl, mock of window.mocks
+      regex = new RegExp mockUrl
+      if regex.test(url)
+        deferred = $q.defer()
+        setTimeout ->
+          deferred.resolve mock
+        return deferred.promise
+    $http.get config.getBaseUrl() + url
 

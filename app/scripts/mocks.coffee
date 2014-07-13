@@ -1,6 +1,6 @@
 
 window.mocks =
-  "/teams":
+  "\\/teams":
     [
       {
         "cloudId": "19004",
@@ -104,5 +104,144 @@ window.mocks =
         "mixed": false,
         "displayPlayerNumber": false,
         "deleted": false
+      }
+    ]
+  "\\/admin\\/team\\/[^\\/]*\\/games":
+    [
+      {
+        "teamId": "19004",
+        "gameId": "game-3B4A2F06-4C48-4ED9-BD7B-A4CE4D9720C4",
+        "opponentName": "cal",
+        "tournamentName": "centex",
+        "gamePoint": 0,
+        "timestamp": "2012-03-17 16:00",
+        "date": "Sat, 3/17",
+        "time": "4:00",
+        "msSinceEpoch": 1332000000000,
+        "ours": 10,
+        "theirs": 8,
+        "lastUpdateUtc": "2014-07-05 09:02",
+        "previousVersionAvailable": false,
+        "deleted": false,
+        "firstPointOline": false
+      },
+      {
+        "teamId": "19004",
+        "gameId": "game-89515CD9-2FC7-4634-B47F-E1EB4CBFF0E7",
+        "opponentName": "Harvard",
+        "tournamentName": "Stanford invite",
+        "gamePoint": 0,
+        "timestamp": "2012-03-03 15:55",
+        "date": "Sat, 3/03",
+        "time": "3:55",
+        "msSinceEpoch": 1330790100000,
+        "ours": 13,
+        "theirs": 7,
+        "lastUpdateUtc": "2014-07-05 09:02",
+        "previousVersionAvailable": false,
+        "deleted": false,
+        "firstPointOline": false
+      },
+      {
+        "teamId": "19004",
+        "gameId": "game-9B46B87C-A150-4641-9DD6-B7C77F6E3A6A",
+        "opponentName": "tufts",
+        "tournamentName": "centex",
+        "gamePoint": 0,
+        "timestamp": "2012-03-18 14:45",
+        "date": "Sun, 3/18",
+        "time": "2:45",
+        "msSinceEpoch": 1332081900000,
+        "ours": 11,
+        "theirs": 6,
+        "lastUpdateUtc": "2014-07-05 09:02",
+        "previousVersionAvailable": false,
+        "deleted": false,
+        "firstPointOline": false
+      },
+      {
+        "teamId": "19004",
+        "gameId": "game-F7CFCDCB-772C-4834-9441-D50D8BD6B7FA",
+        "opponentName": "Texas",
+        "tournamentName": "center",
+        "gamePoint": 0,
+        "timestamp": "2012-03-17 10:42",
+        "date": "Sat, 3/17",
+        "time": "10:42",
+        "msSinceEpoch": 1331980920000,
+        "ours": 12,
+        "theirs": 11,
+        "lastUpdateUtc": "2014-07-05 09:02",
+        "previousVersionAvailable": false,
+        "deleted": false,
+        "firstPointOline": false
+      },
+      {
+        "teamId": "19004",
+        "gameId": "game-C98936CE-9213-4776-8408-63C5BD501C93",
+        "opponentName": "Colorado",
+        "tournamentName": "centex",
+        "gamePoint": 0,
+        "timestamp": "2012-03-18 10:54",
+        "date": "Sun, 3/18",
+        "time": "10:54",
+        "msSinceEpoch": 1332068040000,
+        "ours": 12,
+        "theirs": 9,
+        "lastUpdateUtc": "2014-07-05 09:02",
+        "previousVersionAvailable": false,
+        "deleted": false,
+        "firstPointOline": false
+      },
+      {
+        "teamId": "19004",
+        "gameId": "game-67473DBA-452F-4003-8877-7EBD2AB18616",
+        "opponentName": "mizzou",
+        "tournamentName": "centex",
+        "gamePoint": 0,
+        "timestamp": "2012-03-17 09:00",
+        "date": "Sat, 3/17",
+        "time": "9:00",
+        "msSinceEpoch": 1331974800000,
+        "ours": 13,
+        "theirs": 2,
+        "lastUpdateUtc": "2014-07-05 09:02",
+        "previousVersionAvailable": false,
+        "deleted": false,
+        "firstPointOline": false
+      },
+      {
+        "teamId": "19004",
+        "gameId": "game-56283B7C-E2E3-43B0-A4E2-7BC12895781B",
+        "opponentName": "minnesota",
+        "tournamentName": "centex",
+        "gamePoint": 0,
+        "timestamp": "2012-03-18 12:44",
+        "date": "Sun, 3/18",
+        "time": "12:44",
+        "msSinceEpoch": 1332074640000,
+        "ours": 11,
+        "theirs": 12,
+        "lastUpdateUtc": "2014-07-05 09:02",
+        "previousVersionAvailable": false,
+        "deleted": false,
+        "firstPointOline": false
+      },
+      {
+        "teamId": "19004",
+        "gameId": "game-D4B7F535-60B8-4074-9EE3-0AB6582CFEFF",
+        "opponentName": "Harvard",
+        "tournamentName": "centex",
+        "gamePoint": 0,
+        "timestamp": "2012-03-17 14:18",
+        "date": "Sat, 3/17",
+        "time": "2:18",
+        "msSinceEpoch": 1331993880000,
+        "ours": 13,
+        "theirs": 4,
+        "lastUpdateUtc": "2014-07-05 09:02",
+        "previousVersionAvailable": false,
+        "deleted": false,
+        "firstPointOline": false
       }
     ]

@@ -1,0 +1,7 @@
+.container-fluid
+  .col-md-3
+    ul.nav.nav-pills.nav-stacked
+      li(ng-class="{active: $stateParams.gameId === game.gameId}" ng-repeat="game in games")
+        a(ng-href="#/games/{{$stateParams.cloudId}}/{{game.gameId}}")="{{game.opponentName}}"
+  .col-md-9
+    .ui-view
