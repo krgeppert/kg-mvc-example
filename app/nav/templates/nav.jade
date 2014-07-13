@@ -28,4 +28,4 @@ nav.navbar.navbar-default
             li(ng-repeat="team in teams")
               a=("{{team.name}}")
             li
-              a=("test team")
+              a(ng-click="console.log('woo')")=("test team")
