@@ -1,7 +1,8 @@
 #TODO: refact bower test dependencies into build script.
 #TODO: Fix template renaming refreshing
 #TODO: Fix file adding.
-
+#TODO: Include a recursive set of things under scripts and such.
+#TODO: Break mocks out into json and urls
 _ = require 'lodash'
 gulp = require 'gulp'
 watch = require 'gulp-watch'
@@ -23,6 +24,9 @@ uglify = require 'gulp-uglify'
 concat = require 'gulp-concat'
 debug = require 'gulp-debug'
 filter = require 'gulp-filter'
+rimraf = require 'gulp-rimraf'
+gmap = require 'gulp-map'
+flatten = require 'gulp-flatten'
 runSequence = require 'run-sequence'
 browserSync = require 'browser-sync'
 sys = require 'sys'
@@ -55,10 +59,12 @@ _.each ['dist', 'dev'], (env)->
 
   gulp.task "copy-images-#{env}", ()->
     gulp.src(componentConfig.images.regexes)
+      .pipe(flatten())
       .pipe(gulp.dest("./#{env}/images"))
 
   gulp.task "compile-jade-#{env}", ()->
     gulp.src(componentConfig.templates.regexes)
+      .pipe(flatten())
       .pipe(jade().on('error', console.log))
       .pipe(gulp.dest("./#{env}/templates"))
 
@@ -70,15 +76,18 @@ _.each ['dist', 'dev'], (env)->
 _.each ['dev', 'temp'], (dir)->
   gulp.task "copy-css-#{dir}", ()->
     gulp.src(componentConfig.css.regexes)
+      .pipe(flatten())
       .pipe(gulp.dest("./#{dir}/css"))
 
   gulp.task "compile-coffee-#{dir}", ()->
     gulp.src(componentConfig.scripts.regexes)
+      .pipe(flatten())
       .pipe(coffee({bare:true}).on('error', console.log))
       .pipe(gulp.dest("./#{dir}/js"))
 
   gulp.task "compile-stylus-#{dir}", ()->
     gulp.src(componentConfig.styles.regexes)
+      .pipe(flatten())
       .pipe(stylus().on('error', console.log))
       .pipe(gulp.dest("./#{dir}/css"))
 
@@ -117,8 +126,20 @@ gulp.task 'watch-index', ()->
 
 gulp.task 'watch-coffee', ()->
   watch({glob: componentConfig.scripts.regexes})
+    .pipe(filter(isDeleted))
+    .pipe(plumber())
+    .pipe(gmap((file)->
+      file.base = "dev/js"
+      file.path = "#{file.cwd}/#{file.base}/#{file.path.match(/[^\/]*.coffee$/)[0].replace('.coffee','.js')}"
+      file
+    ))
+    .pipe(rimraf())
+    .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
+
+  watch({glob: componentConfig.scripts.regexes})
     .pipe(filter(isAdded))
     .pipe(plumber())
+    .pipe(flatten())
     .pipe(coffee({bare:true}).on('error', console.log))
     .pipe(gulp.dest("./dev/js"))
     .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
@@ -126,14 +147,28 @@ gulp.task 'watch-coffee', ()->
   gulp.src(componentConfig.scripts.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
+    .pipe(flatten())
     .pipe(coffee({bare:true}).on('error', console.log))
     .pipe(gulp.dest('./dev/js'))
   gulp
 
 gulp.task 'watch-stylus', ()->
   watch({glob: componentConfig.styles.regexes})
+    .pipe(filter(isDeleted))
+    .pipe(plumber())
+    .pipe(gmap((file)->
+      file.base = "dev/css"
+      file.path = "#{file.cwd}/#{file.base}/#{file.path.match(/[^\/]*.styl$/)[0].replace('.styl','.css')}"
+      file
+    ))
+    .pipe(rimraf())
+    .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
+
+
+  watch({glob: componentConfig.styles.regexes})
     .pipe(filter(isAdded))
     .pipe(plumber())
+    .pipe(flatten())
     .pipe(stylus().on('error', console.log))
     .pipe(gulp.dest('./dev/css'))
     .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
@@ -141,33 +176,48 @@ gulp.task 'watch-stylus', ()->
   gulp.src(componentConfig.styles.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
+    .pipe(flatten())
     .pipe(stylus().on('error', console.log))
     .pipe(gulp.dest('./dev/css'))
   gulp
 
 gulp.task 'watch-jade', ()->
   watch({glob: componentConfig.templates.regexes})
+    .pipe(filter(isDeleted))
+    .pipe(plumber())
+    .pipe(gmap((file)->
+      file.base = "dev/templates"
+      file.path = "#{file.cwd}/#{file.base}/#{file.path.match(/[^\/]*.jade$/)[0].replace('.jade','.html')}"
+      file
+    ))
+    .pipe(rimraf())
+
+  watch({glob: componentConfig.templates.regexes})
     .pipe(filter(isAdded))
     .pipe(plumber())
+    .pipe(flatten())
     .pipe(jade({use: [nib()]}).on('error', console.log))
     .pipe(gulp.dest('./dev/templates'))
 
   gulp.src(componentConfig.templates.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
+    .pipe(flatten())
     .pipe(jade({use: [nib()]}).on('error', console.log))
     .pipe(gulp.dest('./dev/templates'))
   gulp
 
 gulp.task 'watch-images', ()->
   watch({glob: componentConfig.images.regexes})
-  .pipe(filter(isAdded))
-  .pipe(plumber())
-  .pipe(gulp.dest('./dev/images'))
+    .pipe(filter(isAdded))
+    .pipe(plumber())
+    .pipe(flatten())
+    .pipe(gulp.dest('./dev/images'))
 
   gulp.src(componentConfig.templates.regexes, {read:false})
     .pipe(watch())
     .pipe(plumber())
+    .pipe(flatten())
     .pipe(gulp.dest('./dev/images'))
   gulp
 
@@ -180,6 +230,7 @@ gulp.task 'live-reload', ()->
 gulp.task 'compile-tests', ()->
   gulp.src(componentConfig.test.regexes)
     .pipe(coffee({bare:true}).on('error', console.log))
+    .pipe(flatten())
     .pipe(gulp.dest('./tests'))
 
 gulp.task 'clean-tests', (cb)->
@@ -204,6 +255,7 @@ gulp.task 'clean-ui-tests', (callback)->
 
 gulp.task 'copy-ui-tests', ()->
   gulp.src(componentConfig['ui-tests'].regexes)
+    .pipe(flatten())
     .pipe(gulp.dest('./ui-tests'))
 
 gulp.task 'compile-java', (callback)->
@@ -237,7 +289,8 @@ gulp.task 'develop-bs', (callback)->
 gulp.task 'debug', (callback)->
   runSequence 'connect-dev', 'browser-sync', callback
 
-
+isDeleted = (file)->
+  file.event is 'deleted'
 isAdded = (file)->
   file.event is 'added'
 # TODO: recognize file name changes, recognize added files.
