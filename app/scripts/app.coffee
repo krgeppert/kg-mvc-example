@@ -14,6 +14,7 @@ angular.module('kgapp', [
     .state 'games.details',
       url: "/{gameId}"
       templateUrl: '/templates/game-details.html'
+      controller: 'GameDetailsCtrl'
 
         # nav:
         #   templateUrl: '/templates/nav.html'

@@ -1,1 +1,9 @@
-span="Details View"
+.page-header
+  h1
+    span="{{game.opponentName}} "
+    small="uploaded: {{game.msSinceEpoch | date:'short'}}"
+.col-md-3.col-md-offset-9
+  .btn-toolbar
+    button.btn.btn-info="Edit"
+    button.btn.btn-success="Link"
+    button.btn.btn-danger="Delete"
