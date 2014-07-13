@@ -1,0 +1,108 @@
+
+window.mocks =
+  "/teams":
+    [
+      {
+        "cloudId": "19004",
+        "name": "hodags",
+        "season": "2012",
+        "nameWithSeason": "hodags 2012",
+        "password": "pisspoor",
+        "numberOfGames": 8,
+        "firstGameDate": "2012-03-03 15:55",
+        "lastGameDate": "2012-03-18 14:45",
+        "private": true,
+        "playersAreLeaguevine": false,
+        "mixed": false,
+        "displayPlayerNumber": false,
+        "deleted": false
+      },
+      {
+        "cloudId": "21002",
+        "name": "hodags",
+        "season": "2012",
+        "nameWithSeason": "hodags 2012",
+        "numberOfGames": 8,
+        "firstGameDate": "2012-03-03 15:55",
+        "lastGameDate": "2012-03-18 14:45",
+        "private": false,
+        "playersAreLeaguevine": false,
+        "mixed": false,
+        "displayPlayerNumber": false,
+        "deleted": false
+      },
+      {
+        "cloudId": "23001",
+        "name": "hodags",
+        "season": "2012",
+        "nameWithSeason": "hodags 2012",
+        "numberOfGames": 8,
+        "firstGameDate": "2012-03-03 15:55",
+        "lastGameDate": "2012-03-18 14:45",
+        "private": false,
+        "playersAreLeaguevine": false,
+        "mixed": false,
+        "displayPlayerNumber": false,
+        "deleted": false
+      },
+      {
+        "cloudId": "24002",
+        "name": "hodags",
+        "season": "2012",
+        "nameWithSeason": "hodags 2012",
+        "numberOfGames": 8,
+        "firstGameDate": "2012-03-03 15:55",
+        "lastGameDate": "2012-03-18 14:45",
+        "private": false,
+        "playersAreLeaguevine": false,
+        "mixed": false,
+        "displayPlayerNumber": false,
+        "deleted": false
+      },
+      {
+        "cloudId": "29001",
+        "name": "Hodags",
+        "season": "2012",
+        "nameWithSeason": "Hodags 2012",
+        "numberOfGames": 5,
+        "firstGameDate": "2012-03-31 09:58",
+        "lastGameDate": "2012-04-01 13:31",
+        "private": false,
+        "playersAreLeaguevine": false,
+        "mixed": false,
+        "displayPlayerNumber": false,
+        "deleted": false
+      },
+      {
+        "cloudId": "127001",
+        "teamId": "team-1DAC406A-F765-41BC-830D-BC5721A315D4",
+        "name": "Sackville Baggins",
+        "season": "2012",
+        "nameWithSeason": "Sackville Baggins 2012",
+        "leaguevineJson": "{\"id\":20922,\"name\":\"Sackville Baggins\",\"season\":{\"id\":20117,\"name\":\"2011\",\"league\":{\"id\":20098,\"name\":\"Fake League\",\"gender\":\"open\"}}}",
+        "numberOfGames": 1,
+        "firstGameDate": "2012-11-05 20:11",
+        "lastGameDate": "2012-11-05 20:11",
+        "private": false,
+        "playersAreLeaguevine": false,
+        "mixed": false,
+        "displayPlayerNumber": false,
+        "deleted": false
+      },
+      {
+        "cloudId": "5668600916475904",
+        "teamId": "team-8AB1286B-7CCB-42DA-B49A-04702115345E",
+        "name": "Madison Radicals COPY",
+        "season": "2013",
+        "nameWithSeason": "Madison Radicals COPY 2013",
+        "leaguevineJson": "{\"id\":22619,\"name\":\"Madison Radicals\",\"season\":{\"id\":20278,\"name\":\"2013\",\"league\":{\"id\":20053,\"name\":\"AUDL\",\"gender\":\"open\"}}}",
+        "numberOfGames": 18,
+        "firstGameDate": "2013-04-21 16:10",
+        "lastGameDate": "2013-08-04 13:14",
+        "private": false,
+        "playersAreLeaguevine": true,
+        "mixed": false,
+        "displayPlayerNumber": false,
+        "deleted": false
+      }
+    ]
