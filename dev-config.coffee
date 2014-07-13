@@ -1,4 +1,4 @@
 module.exports.inDevelopment = [
-  "app/splash"
+  "app/nav"
 ]
 module.exports.route = 'home'

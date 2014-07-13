@@ -13,7 +13,7 @@ module.exports = (config)->
       "bower_components/assert/assert.js"
       "bower_components/jquery/dist/jquery.min.js"
       "bower_components/angular/angular.min.js"
-      "bower_components/angular-route/angular-route.min.js"
+      "bower_components/angular-ui-router/release/angular-ui-router.min.js"
       "bower_components/angular-mocks/angular-mocks.js"
       "bower_components/lodash/dist/lodash.min.js"
       "bower_components/d3/d3.min.js"

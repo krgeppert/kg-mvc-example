@@ -1,16 +1,19 @@
 'use strict';
 
 angular.module('kgapp', [
-  'ngRoute'
-]).config ($routeProvider, $locationProvider)->
+  'ui.router'
+  # 'kg-utilities'
+]).config ($stateProvider, $urlRouterProvider, $locationProvider)->
 
-  $routeProvider.when '/splash',
-    templateUrl: 'templates/splash.html'
-    controller: 'SplashCtrl'
-  .otherwise
-    redirectTo: '/splash'
+  $urlRouterProvider.otherwise "/games"
 
-  # $locationProvider.html5Mode true
+  $stateProvider
+    .state 'games',
+      url: "/games"
+      views:
+        nav:
+          templateUrl: '/templates/nav.html'
+          controller: 'NavCtrl'
 
 .run (logger)->
   logger.info 'Welcome to the kg-mvc-example'

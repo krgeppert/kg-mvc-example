@@ -1,6 +1,6 @@
 'use strict'
 
 angular.module('kgapp')
-  .controller 'SplashCtrl', ($scope, logger) ->
+  .controller 'NavCtrl', ($scope, logger) ->
     $scope.log = (message)->
       return message

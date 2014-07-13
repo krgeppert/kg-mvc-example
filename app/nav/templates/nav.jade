@@ -6,12 +6,12 @@ nav.navbar.navbar-default
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand=("ultiAnalAdmin")
+      a.navbar-brand=("UltiAnalAdmin")
     .collapse.navbar-collapse(kg-dropdown="main-nav")
       ul.nav.navbar-nav(kg-active="'active'")
         li
           a=("Games")
-        li
+        li.default-active
           a=("Players")
         li
           a=("Settings")
@@ -27,5 +27,5 @@ nav.navbar.navbar-default
           ul.dropdown-menu(kg-dropdown="'account-settings'")
             li(ng-repeat="team in teams")
               a=("{{team.name}}")
-            li()
+            li
               a=("test team")

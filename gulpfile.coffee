@@ -1,3 +1,6 @@
+#TODO: refact bower test dependencies into build script.
+#TODO: Fix template renaming refreshing
+#TODO: Fix file adding.
 
 _ = require 'lodash'
 gulp = require 'gulp'
