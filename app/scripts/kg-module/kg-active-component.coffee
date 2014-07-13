@@ -1,6 +1,6 @@
 "use strict"
 
-angular.module('kgapp')
+angular.module('kg-mvc')
   .directive 'kgActive', () ->
     restrict: 'A'
     scope:

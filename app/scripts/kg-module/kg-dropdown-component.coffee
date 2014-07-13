@@ -1,6 +1,6 @@
 "use strict"
 
-angular.module('kgapp').directive 'kgDropdown', (kgDropdowns) ->
+angular.module('kg-mvc').directive 'kgDropdown', (kgDropdowns) ->
   restrict: 'A'
   scope:
     kgDropdown: '='

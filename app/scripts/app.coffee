@@ -2,6 +2,7 @@
 
 angular.module('kgapp', [
   'ui.router'
+  'kg-mvc'
 ]).config ($stateProvider, $urlRouterProvider, $locationProvider)->
 
   $urlRouterProvider.otherwise "/games/kjbasd/kjnsdkjnd"
