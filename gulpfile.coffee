@@ -136,8 +136,10 @@ gulp.task 'watch-coffee', ()->
     .pipe(rimraf())
     .pipe(doIt(_.bind(gulp.start, gulp), 'build-dev-index'))
 
+
   watch({glob: componentConfig.scripts.regexes})
     .pipe(filter(isAdded))
+    .pipe(watch())
     .pipe(plumber())
     .pipe(flatten())
     .pipe(coffee({bare:true}).on('error', console.log))
@@ -167,6 +169,7 @@ gulp.task 'watch-stylus', ()->
 
   watch({glob: componentConfig.styles.regexes})
     .pipe(filter(isAdded))
+    .pipe(watch())
     .pipe(plumber())
     .pipe(flatten())
     .pipe(stylus().on('error', console.log))
